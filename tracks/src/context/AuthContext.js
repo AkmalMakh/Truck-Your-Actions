@@ -1,4 +1,5 @@
-import {AsyncStorage} from '@react-native-community/async-storage';
+// import {AsyncStorage} from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 import createDataContext from './createDataContext';
 import trackerApi from '../api/tracker';
 import {navigate} from '../navigationRef';
@@ -14,26 +15,22 @@ const authReducer = (state, action) =>{
             return state;
     }
 };
-
-const signup =  (dispatch) => async({email, password }) =>{
-            // make api request to sign up
-        try {
-            const response = await trackerApi.post('/signup', {email,password});
-            await AsyncStorage.setItem('token', response.data.token);
-            dispatch({type: 'signup', payload: response.data.token});
-
-        }catch(err){
-            dispatch({type: 'add_error', payload: 'Something went wrong sign up'})
-        }
-
-        // if we sing up modify our state,  and sya that we are authenticated
-        // if singing up fails, we probably need to refflect
-
-        //navigate to main flow
-        navigate('TrackList')
-
-    };
-
+const signup = dispatch => async ({ email, password }) => {
+    try { 
+        
+      const response = await trackerApi.post('/signup', { email, password });
+     
+      await AsyncStorage.setItem('token', response.data.token);
+      dispatch({ type: 'signup', payload: response.data.token });
+  
+      navigate('TrackList');
+    } catch (err) {
+      dispatch({
+        type: 'add_error',
+        payload: 'Something went wrong with sign up'
+      });
+    }
+  };
 
 const signin = (dispatch) => {
     return ({email, password }) =>{

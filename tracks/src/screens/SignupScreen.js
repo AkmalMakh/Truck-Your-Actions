@@ -1,45 +1,29 @@
-import React, {useState ,useContext} from 'react';
-import { View, StyleSheet} from 'react-native';
-import {Text, Button, Input} from 'react-native-elements';
+import React, {useContext} from 'react';
+import { View, StyleSheet,TouchableOpacity} from 'react-native';
+import {Text} from 'react-native-elements';
+import AuthForm from '../components/AuthForm';
+import NavLink from '../components/NavLink';
 import Spacer from '../components/Spacer';
 import  {Context as AuthContext} from '../context/AuthContext';
 
 const  SignupScreen = ({ navigation }) =>{
     const  {state , signup}  = useContext(AuthContext);
-    const [email,setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
- 
+   
 
     return (
     <View style={styles.container}>
-      <Spacer>
-         <Text h3>Sign up for Tracker</Text>
-      </Spacer>
-      
-      
-         <Input 
-         label ="Email" 
-         value={email} 
-         onChangeText ={setEmail}
-         autoCapitalize= "none"
-         autoCorrect={false}
-         />
-        
-         <Input label ="Password"
-         secureTextEntry
-         value={password} 
-         onChangeText ={setPassword} 
-         autoCapitalize= "none"
-         autoCorrect={false}
-         />
-         {state.errorMessage? <Text style={styles.errorMessage}>{state.errorMessage}</Text>: null}
-      <Spacer>
-      <Button title="Sign Up" 
-        onPress = {()=> 
-        signup({email,password}) }/>
-      </Spacer>
+       <AuthForm
+        headerText="Sign Up for Tracker"
+        errorMessage={state.errorMessage}
+        submitButtonText="Sign Up"
+        onSubmit={signup}
+      />
      
+     <NavLink
+        routeName="Signin"
+        text = "Already have an account? Sign in instead!"
+     
+     />
     </View>);
     
 };
@@ -57,12 +41,8 @@ const styles = StyleSheet.create({
     marginBottom: 230
 
   },
-  errorMessage: {
-    fontSize: 16,
-    color: 'red',
-    marginLeft: 15,
-    marginTop: 10
-  }
+
+  
 });
 
 export default  SignupScreen;
