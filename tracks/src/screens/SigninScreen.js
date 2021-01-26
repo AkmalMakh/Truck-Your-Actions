@@ -1,18 +1,25 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Text} from 'react-native';
-import AuthContext from '../context/AuthContext';
+import {NavigationEvents } from 'react-navigation';
+import {Context} from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
 import NavLink from '../components/NavLink';
 
 const  SigninScreen = () =>{
-  //const {state ,signin} = useContext(AuthContext)
+  const {state ,signin, clearErrorMessage} = useContext(Context)
     return (
     <View style={styles.container}>
+      <NavigationEvents onWillBlur={clearErrorMessage} />
+      {/* // onWillFocus  //it calls when we tap to screen 
+      // onDidFocus ={()=> // it calls when you land new screen 
+      // it calls when you  leave the screen 
+      // onDidBlur ={()=> //it calls when you complets */}
+      
         <AuthForm 
         headerText = "Sign in to your Account"
-        errorMessage = {""}
+        errorMessage = {state.errorMessage}
         submitButtonText = "Sign In"
-        onSubmit = {()=>{}}
+        onSubmit = {signin}
         
         />
         <NavLink
