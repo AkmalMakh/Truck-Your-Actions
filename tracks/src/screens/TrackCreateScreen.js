@@ -1,40 +1,17 @@
 import '../_mockLocation';
-import React, {useEffect,useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet} from 'react-native';
 import {Text} from 'react-native-elements';
-import {SafeAreaView} from 'react-navigation';
-import {requestPermissionsAsync, watchPositionAsync, Accuracy } from 'expo-location';
+import {SafeAreaView, withNavigationFocus} from 'react-navigation';
 import Map from '../components/Map';
 import { Context as LocationContext} from '../context/LocationContext';
+import useLocation from '../hooks/useLocation';
 
-const  TrackCreateScreen = () =>{
+
+const  TrackCreateScreen = ({isFocused}) =>{
   const { addLoction }  = useContext(LocationContext);
-  const [err ,setErr] = useState(null);
-
-
-  const startWatching = async () => {
-    try {
-      const { granted } = await requestPermissionsAsync();
-      if (!granted) {
-        throw new Error('Location permission not granted');
-      }
-      await watchPositionAsync({
-        accuracy: Accuracy.BestForNavigation,
-        timeInterval: 1000,
-        distanceInterval: 10
-      },(location)=>{
-        addLoction(location);
-      });
-    
-
-    } catch (e) {
-      setErr(e);
-    }
-  };
-useEffect (()=>{
-  startWatching();
-
-}, []);
+  //when you want to access user loction how it changes over time you can call function useLoction after inserting hook which is reusable  
+  const [err] = useLocation(isFocused, addLoction);
 
     return (
       <SafeAreaView forceInset={{top: 'always'}}>
@@ -48,4 +25,4 @@ useEffect (()=>{
 
 const styles = StyleSheet.create({});
 
-export default  TrackCreateScreen;
+export default withNavigationFocus(TrackCreateScreen) ;
